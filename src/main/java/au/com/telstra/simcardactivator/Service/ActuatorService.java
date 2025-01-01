@@ -1,8 +1,11 @@
 package au.com.telstra.simcardactivator.Service;
 
 import au.com.telstra.simcardactivator.Entity.ActuatorResponse;
+import au.com.telstra.simcardactivator.Entity.Customer;
+import au.com.telstra.simcardactivator.Repository.SIMActivatorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,21 +17,31 @@ import java.util.Map;
 public class ActuatorService {
     private static final String ActuatorURL="http://localhost:8444/actuate";
     private static final Logger log= LoggerFactory.getLogger(ActuatorService.class);
+    @Autowired
+    private SIMActivatorRepository simActivatorRepository;
 
-    public boolean activateSIM(String iccid) {
+    public Customer activateSIM(String iccid,String customerEmail) {
         RestTemplate restTemplate=new RestTemplate();
-        try{
+
+//        try{
+
             Map<String,String> payload=new HashMap<String,String>();
             payload.put("ICCID",iccid);
-            ActuatorResponse actuatorResponse=restTemplate.postForObject(ActuatorURL,payload, ActuatorResponse.class);
-            if(actuatorResponse==null)log.info("SimCardActuator Not Started");
-            return actuatorResponse!=null && actuatorResponse.isSuccess();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
+            boolean success=restTemplate.postForObject(ActuatorURL,payload, ActuatorResponse.class).isSuccess();
+            Customer customer=new Customer(iccid,customerEmail,success);
+            return simActivatorRepository.save(customer);
+
+//            return actuatorResponse!=null && actuatorResponse.isSuccess();
+
+//        catch(Exception e){
+//
+//
+//        }
 
 
+    }
+
+    public Customer getCustomerById(String iccid) {
+        return simActivatorRepository.getByIccid(iccid);
     }
 }
