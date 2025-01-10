@@ -13,7 +13,11 @@ public class Customer {
     private String iccid;
     private String email;
     private boolean isActivated;
-    public Customer(String iccid,String email,boolean isActivated){
+
+    public Customer() {
+    }
+
+    public Customer(String iccid, String email, boolean isActivated){
         this.iccid = iccid;
         this.email = email;
         this.isActivated = isActivated;

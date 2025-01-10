@@ -5,6 +5,14 @@ public class ActivationPayLoad {
         private String iccid;
         private String customerEmail;
 
+    public ActivationPayLoad() {
+    }
+
+    public ActivationPayLoad(String iccid, String customerEmail) {
+        this.iccid = iccid;
+        this.customerEmail = customerEmail;
+    }
+
     public String getIccid() {
         return iccid;
     }
