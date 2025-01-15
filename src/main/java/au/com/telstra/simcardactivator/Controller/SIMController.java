@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SIMController {
-    @Autowired
-    private ActuatorService actuatorService;
+//    @Autowired
+   private ActuatorService actuatorService;
+   public SIMController(ActuatorService actuatorService){
+       this.actuatorService=actuatorService;
+   }
     @PostMapping("/ActivateSIM")
     public ResponseEntity<Customer> activateSIM(@RequestBody ActivationPayLoad activationPayLoad){
         Customer customer=actuatorService.activateSIM(activationPayLoad.getIccid(),activationPayLoad.getCustomerEmail());
